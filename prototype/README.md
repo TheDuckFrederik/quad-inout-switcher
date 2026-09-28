@@ -1,6 +1,14 @@
 # Quad In/Out Switcher (Prototype)
 
-Arduino Nano-controlled 4-input / 4-output guitar pedal switching prototype.
+Arduino Nano-controlled 4-input / 4-output guitar switcher prototype.
+
+## What this prototype currently covers
+
+- Controller behavior (button handling + channel selection)
+- LED indication for selected input and selected output
+- Breadboard validation of Nano pin mapping
+
+> Audio routing hardware is **not finalized** yet. The current sketch does not switch guitar audio paths.
 
 ## Prototype parts
 
@@ -17,19 +25,13 @@ Arduino Nano-controlled 4-input / 4-output guitar pedal switching prototype.
 
 - Hardware parts/build notes: `prototype/hardware.md`
 - Nano pin mapping + wiring assumptions: `prototype/pinout.md`
-- Firmware behavior + upload/test steps: `prototype/firmware.md`
-
-## Prototype behavior
-
-- Exactly one input is selected at a time
-- Exactly one output is selected at a time
-- Input button cycles input selection
-- Output button cycles output selection
-- One input LED and one output LED indicate the active selections
+- Firmware summary + upload/test quick guide: `prototype/firmware.md`
+- Full beginner walkthrough of the sketch: `prototype/code-walkthrough.md`
 
 ## Quick test flow
 
 1. Wire the Nano/buttons/LEDs per `prototype/pinout.md`.
 2. Upload `prototype/quad_inout_switcher/quad_inout_switcher.ino` using `prototype/firmware.md`.
 3. Power by USB.
-4. Press each button and verify the corresponding LED group cycles 1 → 4 and wraps.
+4. Verify startup: Input LED 1 and Output LED 1 are on.
+5. Press each button and verify its LED group cycles 1 → 4 and wraps back to 1.
