@@ -2,34 +2,56 @@
 
 ## Components
 
-### Controller and display
-
-- **1× Arduino Nano** — reads the two buttons and drives the OLED over I2C.
-- **1× 128×32 I2C OLED display** — preferably an SSD1306-compatible module with pins labelled `VCC`, `GND`, `SDA`, and `SCL`.
-- **1× breadboard**
+- 1× Arduino Nano, ATmega328P
+- 1× 128×32 I2C OLED display, preferably SSD1306-compatible
+- 2× four-prong PCB tactile push buttons
+  - input-cycle button
+  - output-cycle button
+- 8× 6.3 mm female jacks
+  - J1–J4: inputs 1–4
+  - J5–J8: outputs 1–4
+- 1× breadboard
 - Jumper wires
-- USB data cable for power and programming
+- USB data cable for Nano power and programming
+- Optional 100 nF capacitor near OLED power pins
 
-### User controls
+## Prototype wiring roles
 
-- **2× four-prong PCB tactile push buttons**
-  - Input button: cycles the selected input.
-  - Output button: cycles the selected output.
+### Controller
 
-### Audio connectors
+The Nano reads the two buttons and drives the OLED over I2C. The display is split horizontally: small `IN` and `OUT` labels, with large channel numbers beside them.
 
-- **8× 6.3 mm female jacks**
-  - 4× inputs: Input 1–Input 4.
-  - 4× outputs: Output 1–Output 4.
+### Buttons
 
-The jacks are included for mechanical and layout prototyping. They are not connected to Arduino pins. The Nano cannot safely switch guitar audio directly, and the audio routing circuit has not yet been selected.
+- Input button signal: Nano D2
+- Output button signal: Nano D3
+- Other electrical side of each button: Nano GND
+- No external button resistors are required because the sketch uses `INPUT_PULLUP`.
 
-## Removed parts
+### OLED
 
-The previous eight LEDs and eight LED resistors are no longer part of this OLED prototype.
+- SDA: Nano A4
+- SCL: Nano A5
+- VCC: Nano 5V only if the module is 5V-compatible
+- GND: Nano GND
 
-## Power
+### 6.3 mm jacks
 
-For this prototype, power the Nano from USB. Power the OLED from the voltage specified by its particular breakout board. Many Arduino OLED modules accept 5 V, but some bare OLED modules require 3.3 V. Check the module markings before connecting VCC.
+The jacks are mounted and labelled in the prototype but are not routed by the Nano yet:
 
-The future pedal version will use a 9 V DC input with appropriate regulation and protection. Do not connect an unregulated 9 V pedal supply directly to the OLED or Nano 5 V pin.
+- J1 tip: INPUT_1_AUDIO
+- J2 tip: INPUT_2_AUDIO
+- J3 tip: INPUT_3_AUDIO
+- J4 tip: INPUT_4_AUDIO
+- J5 tip: OUTPUT_1_AUDIO
+- J6 tip: OUTPUT_2_AUDIO
+- J7 tip: OUTPUT_3_AUDIO
+- J8 tip: OUTPUT_4_AUDIO
+- All jack sleeves: common AUDIO_GND rail
+- Normally-closed jack contacts, if present: leave unconnected for now
+
+Do not connect the jack tips to Arduino GPIO pins. The future relay or analog-switch stage will connect these audio nodes.
+
+## Current limitation
+
+This is a controller and display prototype. It does not yet pass or switch guitar audio. The future routing hardware will be added after the switching architecture is chosen.

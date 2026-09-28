@@ -41,16 +41,21 @@ uint8_t advanceSelection(uint8_t currentIndex) {
 
 void drawSelection(const SelectionState &state) {
   display.clearDisplay();
-  display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
 
+  // Small labels on the left and right halves of the display.
+  display.setTextSize(1);
   display.setCursor(0, 0);
-  display.print(F("IN: "));
-  display.println(state.activeInput + 1);
+  display.print(F("IN"));
+  display.setCursor(64, 0);
+  display.print(F("OUT"));
 
-  display.setCursor(0, 16);
-  display.print(F("Out: "));
-  display.println(state.activeOutput + 1);
+  // Large numbers beside their labels, on the same row.
+  display.setTextSize(3);
+  display.setCursor(16, 5);
+  display.print(state.activeInput + 1);
+  display.setCursor(102, 5);
+  display.print(state.activeOutput + 1);
 
   display.display();
 }
