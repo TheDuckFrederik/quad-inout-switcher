@@ -1,6 +1,6 @@
 # Arduino Nano Prototype Firmware Walkthrough
 
-Sketch: `/home/runner/work/quad-inout-switcher/quad-inout-switcher/prototype/quad_inout_switcher/quad_inout_switcher.ino`
+Sketch: `prototype/quad_inout_switcher/quad_inout_switcher.ino`
 
 This document explains the current prototype firmware exactly as implemented so you can wire, upload, test, and safely modify it later.
 
