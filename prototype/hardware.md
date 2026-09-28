@@ -1,31 +1,35 @@
 # Prototype Hardware
 
-## Arduino prototype components
+## Components
 
-- 1x Arduino Nano
-- 8x 6.3 mm female jacks
-  - 4x inputs
-  - 4x outputs
-- 2x Arduino PCB-mounted push buttons
-  - one for cycling inputs
-  - one for cycling outputs
-- 8x standard LEDs
-  - 4x input indicators
-  - 4x output indicators
-- 8x current-limiting resistors for LEDs
-  - typically 220 Ω to 1 kΩ depending on brightness
-- 1x breadboard
-- jumper wires
-- USB power via the Nano during prototype testing
+### Controller and display
 
-## Wiring consistency notes
+- **1× Arduino Nano** — reads the two buttons and drives the OLED over I2C.
+- **1× 128×32 I2C OLED display** — preferably an SSD1306-compatible module with pins labelled `VCC`, `GND`, `SDA`, and `SCL`.
+- **1× breadboard**
+- Jumper wires
+- USB data cable for power and programming
 
-- Prototype control wiring (buttons + LEDs) is defined in `prototype/pinout.md`.
-- Buttons are expected to use Nano internal pull-ups and switch to GND.
-- LEDs are expected to be active-high with series resistors to GND.
+### User controls
 
-## Notes
+- **2× four-prong PCB tactile push buttons**
+  - Input button: cycles the selected input.
+  - Output button: cycles the selected output.
 
-This prototype covers the control layer and initial layout only.
+### Audio connectors
 
-The audio routing layer will be defined later once the switching hardware is chosen.
+- **8× 6.3 mm female jacks**
+  - 4× inputs: Input 1–Input 4.
+  - 4× outputs: Output 1–Output 4.
+
+The jacks are included for mechanical and layout prototyping. They are not connected to Arduino pins. The Nano cannot safely switch guitar audio directly, and the audio routing circuit has not yet been selected.
+
+## Removed parts
+
+The previous eight LEDs and eight LED resistors are no longer part of this OLED prototype.
+
+## Power
+
+For this prototype, power the Nano from USB. Power the OLED from the voltage specified by its particular breakout board. Many Arduino OLED modules accept 5 V, but some bare OLED modules require 3.3 V. Check the module markings before connecting VCC.
+
+The future pedal version will use a 9 V DC input with appropriate regulation and protection. Do not connect an unregulated 9 V pedal supply directly to the OLED or Nano 5 V pin.

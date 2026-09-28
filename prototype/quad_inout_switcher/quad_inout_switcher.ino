@@ -1,17 +1,24 @@
+# Arduino Nano OLED prototype
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <Arduino.h>
+#include <Wire.h>
 
 namespace {
 
 constexpr uint8_t kChannelCount = 4;
 constexpr unsigned long kDebounceMs = 30;
 
-// Buttons use INPUT_PULLUP and should short to GND when pressed.
 constexpr uint8_t kInputButtonPin = 2;
 constexpr uint8_t kOutputButtonPin = 3;
 
-// LEDs are active-high and should be wired with a series resistor to GND.
-constexpr uint8_t kInputLedPins[kChannelCount] = {4, 5, 6, 7};
-constexpr uint8_t kOutputLedPins[kChannelCount] = {8, 9, 10, 11};
+constexpr uint8_t kOledWidth = 128;
+constexpr uint8_t kOledHeight = 32;
+constexpr int8_t kOledResetPin = -1;
+constexpr uint8_t kOledAddress = 0x3C;
+
+Adafruit_SSD1306 display(kOledWidth, kOledHeight, &Wire, kOledResetPin);
 
 struct SelectionState {
   uint8_t activeInput;
@@ -32,25 +39,31 @@ uint8_t advanceSelection(uint8_t currentIndex) {
   return (currentIndex + 1) % kChannelCount;
 }
 
-void updateIndicatorLeds(const SelectionState &state) {
-  for (uint8_t index = 0; index < kChannelCount; ++index) {
-    digitalWrite(kInputLedPins[index], index == state.activeInput ? HIGH : LOW);
-    digitalWrite(kOutputLedPins[index], index == state.activeOutput ? HIGH : LOW);
-  }
+void drawSelection(const SelectionState &state) {
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print(F("INPUT "));
+  display.println(state.activeInput + 1);
+  display.setCursor(0, 16);
+  display.print(F("OUTPUT "));
+  display.println(state.activeOutput + 1);
+  display.display();
 }
 
 void updateRoutingOutputs(const SelectionState &state) {
   (void)state;
-  // Future relay or analog switch control can be added here without changing
-  // button handling or selection state logic.
+  // Future relay or analog-switch control belongs here.
 }
 
 void applySelection(const SelectionState &state) {
-  updateIndicatorLeds(state);
+  drawSelection(state);
   updateRoutingOutputs(state);
 }
 
-bool consumeButtonPress(ButtonState &buttonState, uint8_t pin, unsigned long nowMs) {
+bool consumeButtonPress(ButtonState &buttonState, uint8_t pin,
+                        unsigned long nowMs) {
   const bool reading = digitalRead(pin);
 
   if (reading != buttonState.lastReading) {
@@ -76,16 +89,14 @@ void setup() {
   pinMode(kInputButtonPin, INPUT_PULLUP);
   pinMode(kOutputButtonPin, INPUT_PULLUP);
 
-  for (uint8_t pin : kInputLedPins) {
-    pinMode(pin, OUTPUT);
-    digitalWrite(pin, LOW);
+  if (!display.begin(SSD1306_SWITCHCAPVCC, kOledAddress)) {
+    // Stop here if the OLED cannot be initialized.
+    for (;;) {
+    }
   }
 
-  for (uint8_t pin : kOutputLedPins) {
-    pinMode(pin, OUTPUT);
-    digitalWrite(pin, LOW);
-  }
-
+  display.clearDisplay();
+  display.display();
   applySelection(selection);
 }
 

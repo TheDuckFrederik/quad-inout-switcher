@@ -1,37 +1,60 @@
-# Quad In/Out Switcher (Prototype)
+# Quad In/Out Switcher — Arduino OLED Prototype
 
-Arduino Nano-controlled 4-input / 4-output guitar switcher prototype.
+This prototype uses an Arduino Nano to select one of four inputs and one of four outputs. The selected values are shown on a 128×32 I2C OLED display.
 
-## What this prototype currently covers
+## Current prototype scope
 
-- Controller behavior (button handling + channel selection)
-- LED indication for selected input and selected output
-- Breadboard validation of Nano pin mapping
+- Two push buttons cycle the selected input and output.
+- The OLED displays the current selection.
+- Eight 6.3 mm jacks are reserved for the four inputs and four outputs.
+- Audio routing is **not implemented yet**. The Nano does not carry guitar audio.
 
-> Audio routing hardware is **not finalized** yet. The current sketch does not switch guitar audio paths.
+## Components
 
-## Prototype parts
+- 1× Arduino Nano, ATmega328P
+- 1× 128×32 I2C OLED display, normally SSD1306-compatible
+- 2× four-prong PCB tactile push buttons
+- 8× 6.3 mm female jacks
+  - 4× input jacks
+  - 4× output jacks
+- 1× breadboard
+- Jumper wires
+- USB data cable for Nano power/programming
+- Optional: 100 nF capacitor near the OLED power pins for supply-noise reduction
 
-- 1x Arduino Nano
-- 8x 6.3mm female jacks (4 inputs, 4 outputs)
-- 2x PCB-mounted push buttons (input cycle, output cycle)
-- 8x LEDs (4 input indicators, 4 output indicators)
-- 8x LED resistors (typically 220 Ω to 1 kΩ)
-- 1x breadboard
-- jumper wires
-- USB power for prototype testing
+No LED resistors are required because the eight LEDs were removed from this prototype.
 
-## Documentation
+## Pin summary
 
-- Hardware parts/build notes: `prototype/hardware.md`
-- Nano pin mapping + wiring assumptions: `prototype/pinout.md`
-- Firmware summary + upload/test quick guide: `prototype/firmware.md`
-- Full beginner walkthrough of the sketch: `prototype/code-walkthrough.md`
+| Arduino Nano pin | Function |
+|---|---|
+| D2 | Input-cycle button |
+| D3 | Output-cycle button |
+| A4 | OLED SDA |
+| A5 | OLED SCL |
+| 5V or module-approved supply | OLED VCC |
+| GND | OLED ground and button ground |
 
-## Quick test flow
+## Software requirements
 
-1. Wire the Nano/buttons/LEDs per `prototype/pinout.md`.
-2. Upload `prototype/quad_inout_switcher/quad_inout_switcher.ino` using `prototype/firmware.md`.
-3. Power by USB.
-4. Verify startup: Input LED 1 and Output LED 1 are on.
-5. Press each button and verify its LED group cycles 1 → 4 and wraps back to 1.
+Install these libraries in Arduino IDE → Library Manager:
+
+- Adafruit GFX Library
+- Adafruit SSD1306
+
+The sketch is located at:
+
+`prototype/quad_inout_switcher/quad_inout_switcher.ino`
+
+## Quick test
+
+1. Install the two Adafruit libraries.
+2. Wire the buttons and OLED using `prototype/pinout.md`.
+3. Open the sketch in Arduino IDE.
+4. Select **Arduino Nano**, **ATmega328P**, and the correct serial port.
+5. Upload the sketch.
+6. The display should show `INPUT 1` and `OUTPUT 1`.
+7. Press the input button to cycle 1 → 2 → 3 → 4 → 1.
+8. Press the output button to cycle 1 → 2 → 3 → 4 → 1.
+
+The jack wiring and audio-switching circuit will be defined after the routing hardware is selected.
