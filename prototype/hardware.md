@@ -18,6 +18,12 @@
 - jumper wires
 - USB power via the Nano during prototype testing
 
+## Wiring consistency notes
+
+- Prototype control wiring (buttons + LEDs) is defined in `prototype/pinout.md`.
+- Buttons are expected to use Nano internal pull-ups and switch to GND.
+- LEDs are expected to be active-high with series resistors to GND.
+
 ## Notes
 
 This prototype covers the control layer and initial layout only.
