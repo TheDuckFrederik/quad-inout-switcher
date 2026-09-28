@@ -1,5 +1,3 @@
-# Arduino Nano OLED prototype
-
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
@@ -10,9 +8,11 @@ namespace {
 constexpr uint8_t kChannelCount = 4;
 constexpr unsigned long kDebounceMs = 30;
 
+// Buttons use INPUT_PULLUP and connect to GND when pressed.
 constexpr uint8_t kInputButtonPin = 2;
 constexpr uint8_t kOutputButtonPin = 3;
 
+// 128x32 SSD1306 I2C OLED.
 constexpr uint8_t kOledWidth = 128;
 constexpr uint8_t kOledHeight = 32;
 constexpr int8_t kOledResetPin = -1;
@@ -43,18 +43,21 @@ void drawSelection(const SelectionState &state) {
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
+
   display.setCursor(0, 0);
-  display.print(F("INPUT "));
+  display.print(F("IN: "));
   display.println(state.activeInput + 1);
+
   display.setCursor(0, 16);
-  display.print(F("OUTPUT "));
+  display.print(F("Out: "));
   display.println(state.activeOutput + 1);
+
   display.display();
 }
 
 void updateRoutingOutputs(const SelectionState &state) {
   (void)state;
-  // Future relay or analog-switch control belongs here.
+  // Future relay or analog audio-switch control belongs here.
 }
 
 void applySelection(const SelectionState &state) {
@@ -90,7 +93,7 @@ void setup() {
   pinMode(kOutputButtonPin, INPUT_PULLUP);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, kOledAddress)) {
-    // Stop here if the OLED cannot be initialized.
+    // Stop if the OLED cannot be initialized.
     for (;;) {
     }
   }

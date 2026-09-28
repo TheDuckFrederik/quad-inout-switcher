@@ -2,149 +2,140 @@
 
 Sketch: `prototype/quad_inout_switcher/quad_inout_switcher.ino`
 
-This document explains the current prototype firmware exactly as implemented so you can wire, upload, test, and safely modify it later.
+This document explains the current OLED prototype firmware so it can be wired, uploaded, tested, and modified safely.
 
-## 1) Purpose and current prototype limits
+## 1) Purpose and current limits
 
-The prototype firmware currently handles only:
+The firmware currently handles:
 
-- two buttons (cycle selected input / cycle selected output)
-- eight LEDs (show selected input and selected output)
+- two buttons for selecting an input and an output
+- a 128×32 I2C OLED for displaying the selections
+- software debounce for both buttons
 
-It does **not** route guitar audio yet. The sketch includes a placeholder (`updateRoutingOutputs`) where future relay or analog-switch routing logic can be added.
+It does **not** route guitar audio yet. The eight 6.3 mm jacks are documented for the physical prototype, but the audio switching circuit is still undecided. `updateRoutingOutputs(...)` is the future integration point.
 
-## 2) Wiring map (Arduino Nano)
+## 2) Display output
+
+The display is intentionally formatted as:
+
+```text
+IN: 1
+Out: 1
+```
+
+The input button changes only the number after `IN:`. The output button changes only the number after `Out:`.
+
+## 3) Wiring map
 
 | Function | Nano pin | Wiring detail | Behavior |
 |---|---:|---|---|
-| Input select button | D2 | Button between D2 and GND | Uses `INPUT_PULLUP` (`LOW` when pressed) |
-| Output select button | D3 | Button between D3 and GND | Uses `INPUT_PULLUP` (`LOW` when pressed) |
-| Input LED 1..4 | D4, D5, D6, D7 | Pin -> LED + resistor in series -> GND | Active-high (`HIGH` = ON) |
-| Output LED 1..4 | D8, D9, D10, D11 | Pin -> LED + resistor in series -> GND | Active-high (`HIGH` = ON) |
+| Input select button | D2 | Button between D2 and GND | `INPUT_PULLUP`; LOW when pressed |
+| Output select button | D3 | Button between D3 and GND | `INPUT_PULLUP`; LOW when pressed |
+| OLED SDA | A4 | OLED SDA to Nano A4 | I2C data |
+| OLED SCL | A5 | OLED SCL to Nano A5 | I2C clock |
+| OLED VCC | 5V or approved supply | Match the OLED module rating | Power |
+| OLED GND | GND | Shared with button ground | Ground |
 
-Use one resistor per LED (typically 220 Ω to 1 kΩ). The resistor can be on either side of the LED as long as the LED+resistor are in series from pin to GND. All grounds must be common with Nano GND.
+## 4) Important assumptions
 
-## 3) Important assumptions in code
+- `kChannelCount = 4`, so there are four selectable inputs and four selectable outputs.
+- The OLED is SSD1306-compatible, 128×32, and normally uses I2C address `0x3C`.
+- The OLED reset pin is not connected; the library is configured with `-1`.
+- Buttons are idle at `HIGH` and go `LOW` when pressed.
+- Debouncing uses a 30 ms stability window.
+- Channel indexes are stored internally as `0..3`, but displayed as `1..4`.
 
-- `kChannelCount = 4` means there are always 4 selectable inputs and 4 selectable outputs.
-- The two button pins are expected to idle at `HIGH` and go `LOW` when pressed.
-- Debounce window is `kDebounceMs = 30` ms.
-- Internally, selected channels are zero-based indexes (`0..3`), shown physically as channel numbers 1..4.
+## 5) Data structures and state
 
-## 4) Data structures and state
+`SelectionState` stores:
 
-The sketch defines:
+- `activeInput`: zero-based selected input
+- `activeOutput`: zero-based selected output
 
-- `SelectionState { activeInput, activeOutput }`
-  - stores which input index and output index are selected
-- `ButtonState { lastReading, stableReading, lastChangeMs }`
-  - tracks debounced state per button
+The initial value is `{0, 0}`, which displays `IN: 1` and `Out: 1`.
 
-Current startup defaults:
+`ButtonState` stores the last raw reading, the accepted stable reading, and the time the raw reading last changed. Each button has its own state object.
 
-- `selection = {0, 0}`
-- so Input LED 1 and Output LED 1 are on after setup completes
-
-## 5) Function-by-function walkthrough
+## 6) Function walkthrough
 
 ### `advanceSelection(uint8_t currentIndex)`
 
-- Returns `(currentIndex + 1) % kChannelCount`
-- This creates wraparound behavior: `0 -> 1 -> 2 -> 3 -> 0`
+Returns `(currentIndex + 1) % kChannelCount`. This gives wraparound behavior:
 
-### `updateIndicatorLeds(const SelectionState &state)`
+```text
+0 → 1 → 2 → 3 → 0
+```
 
-- Loops from index `0` to `3`
-- Turns on exactly one input LED (matching `activeInput`)
-- Turns on exactly one output LED (matching `activeOutput`)
-- All non-selected LEDs are turned off
+### `drawSelection(const SelectionState &state)`
+
+1. Clears the display buffer.
+2. Sets text size to 2 and text color to white.
+3. Writes `IN: ` on the first line, followed by the selected input number.
+4. Writes `Out: ` on the second line, followed by the selected output number.
+5. Calls `display.display()` to send the buffer to the OLED.
 
 ### `updateRoutingOutputs(const SelectionState &state)`
 
-- Currently placeholder only (`(void)state;`)
-- Extension point for future relay/analog switch control
-- Safe place to add routing logic without changing button/debounce flow
+This is currently a placeholder. Later it can set relay or analog-switch control pins based on `activeInput` and `activeOutput`.
 
 ### `applySelection(const SelectionState &state)`
 
-- Single call point that updates indicators and routing outputs
-- Keeps output updates grouped and consistent
+Calls the display update and future routing update together so the user interface and routing state remain synchronized.
 
-### `consumeButtonPress(ButtonState &buttonState, uint8_t pin, unsigned long nowMs)`
+### `consumeButtonPress(...)`
 
-Debounce and press detection logic:
+The debounce process is:
 
-1. Read current pin level.
-2. If reading changed from last sample, save new reading and timestamp.
-3. If reading stays unchanged for at least 30 ms and differs from stable reading, accept it as new stable state.
-4. Return `true` only when new stable state is `LOW` (button press event).
+1. Read the button pin.
+2. Detect whether the raw reading changed.
+3. Start a new timer when it changes.
+4. Wait until the reading remains unchanged for 30 ms.
+5. Accept the new stable state.
+6. Return `true` only when the accepted state is `LOW`.
 
-Result: one event per physical press (when the button settles to pressed state).
+This produces one selection change per button press rather than many changes caused by switch bounce.
 
-## 6) What `setup()` does
+## 7) `setup()`
 
-- Sets button pins D2/D3 to `INPUT_PULLUP`
-- Sets all LED pins D4..D11 as `OUTPUT`
-- Initializes all LEDs to `LOW`
-- Calls `applySelection(selection)` so defaults are shown immediately
+- Configures D2 and D3 as `INPUT_PULLUP`.
+- Initializes the OLED at address `0x3C`.
+- Stops in an infinite loop if the OLED initialization fails.
+- Clears the OLED and draws the default `IN: 1` / `Out: 1` state.
 
-## 7) What `loop()` does
+## 8) `loop()`
 
-Every iteration:
+Every loop iteration:
 
-1. Read current time with `millis()`.
-2. Check input button with debounce helper:
-   - on valid press, advance input selection.
-3. Check output button with debounce helper:
-   - on valid press, advance output selection.
-4. If either changed, call `applySelection(selection)`.
+1. Reads the current time using `millis()`.
+2. Checks the input button.
+3. Checks the output button.
+4. Applies the new selection only if one of the buttons generated a valid press.
 
-Input and output selection are independent and can be changed in any order.
+The two selections are independent.
 
-## 8) Upload steps (Arduino IDE)
+## 9) Upload and bench test
 
-1. Connect Nano via USB.
-2. Open `prototype/quad_inout_switcher/quad_inout_switcher.ino`.
-3. In Arduino IDE select:
-   - **Board**: Arduino Nano
-   - **Processor**: ATmega328P
-   - **Port**: your Nano COM/tty port
-4. Click **Upload**.
-5. If upload fails, try the alternative bootloader processor option for your Nano clone.
+1. Install **Adafruit GFX Library** and **Adafruit SSD1306**.
+2. Wire the OLED and buttons according to `prototype/pinout.md`.
+3. Open the sketch in Arduino IDE.
+4. Select Arduino Nano, the correct ATmega328P processor/bootloader, and the correct port.
+5. Upload.
+6. Confirm `IN: 1` and `Out: 1`.
+7. Press each button and confirm its corresponding value cycles 1 → 2 → 3 → 4 → 1.
 
-## 9) Step-by-step bench test
+## 10) Troubleshooting
 
-1. Power with USB after wiring buttons and LEDs.
-2. Confirm startup: Input LED 1 ON, Output LED 1 ON.
-3. Press input button repeatedly:
-   - LEDs should move 1 -> 2 -> 3 -> 4 -> 1.
-4. Press output button repeatedly:
-   - LEDs should move 1 -> 2 -> 3 -> 4 -> 1.
-5. Hold a button down:
-   - should not free-run through channels (only press events are counted).
-6. Press both buttons at different times:
-   - input and output groups should behave independently.
+- **Blank OLED:** check OLED voltage, GND, SDA/A4, SCL/A5, library installation, and I2C address. Try `0x3D` if needed.
+- **Button always active:** use opposite electrical sides of the four-prong button; do not use two pins from the same side.
+- **Button does nothing:** connect one button side to D2 or D3 and the opposite side to GND.
+- **Random extra presses:** verify the button wiring, common ground, and stable breadboard connections.
+- **Upload failure:** use a data USB cable and try the old bootloader option for some Nano clones.
 
-## 10) Common mistakes and troubleshooting
+## 11) Future audio routing
 
-- **No LED turns on at startup**
-  - Check USB power and ground continuity.
-  - Verify LED polarity (anode to pin side, cathode toward resistor/GND).
-- **Wrong LED lights**
-  - Re-check D4..D7 as input LEDs and D8..D11 as output LEDs.
-- **Button works backwards / always triggered**
-  - Button must short pin to GND when pressed.
-  - Do not wire button to +5V when using `INPUT_PULLUP`.
-- **Random extra presses**
-  - Ensure solid breadboard connections and shared ground.
-  - Keep button wires short and stable.
+When the routing hardware is selected:
 
-## 11) Safe extension points for future audio routing
-
-When adding real audio switching hardware later:
-
-- keep button/debounce logic unchanged if possible
-- implement routing pin writes in `updateRoutingOutputs`
-- leave `SelectionState`, wraparound, and LED updates as-is for predictable UI behavior
-
-This keeps the current control behavior stable while adding the routing layer in one clear location.
+- keep the button and debounce logic unchanged where possible
+- implement control writes in `updateRoutingOutputs`
+- use the existing `SelectionState` values to select the required input/output path
+- never connect guitar audio directly to Nano GPIO pins

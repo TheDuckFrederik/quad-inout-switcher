@@ -2,21 +2,25 @@
 
 Sketch: `prototype/quad_inout_switcher/quad_inout_switcher.ino`
 
+## Display layout
+
+The 128×32 OLED displays two lines:
+
+```text
+IN: 1
+Out: 1
+```
+
+The input and output numbers range from 1 through 4.
+
 ## What the sketch does
 
 - Starts with Input 1 and Output 1 selected.
 - Reads two buttons with the Nano's internal pull-up resistors.
-- Debounces button presses in software.
+- Debounces button presses in software for 30 ms.
 - Cycles input selection from 1 to 4 and wraps to 1.
 - Cycles output selection from 1 to 4 and wraps to 1.
-- Displays the current selection on a 128×32 I2C OLED.
-
-The OLED screen shows:
-
-```text
-INPUT 1
-OUTPUT 1
-```
+- Redraws the OLED only when a selection changes.
 
 ## What the sketch does not do yet
 
@@ -33,6 +37,16 @@ Install from Library Manager:
 1. **Adafruit GFX Library**
 2. **Adafruit SSD1306**
 
+## Pin mapping
+
+- **D2**: input-cycle button (`INPUT_PULLUP`, active-low)
+- **D3**: output-cycle button (`INPUT_PULLUP`, active-low)
+- **A4**: OLED SDA
+- **A5**: OLED SCL
+- **5V/GND**: OLED power, according to the OLED module's voltage rating
+
+See `prototype/pinout.md` for the complete wiring diagram.
+
 ## Upload instructions
 
 1. Connect the Nano using a USB data cable.
@@ -46,10 +60,16 @@ Install from Library Manager:
 ## Test instructions
 
 1. Power the Nano from USB.
-2. Confirm the OLED initializes and displays Input 1 / Output 1.
-3. Press the input button once. The display should show Input 2.
-4. Continue pressing to verify 3, 4, then 1.
-5. Repeat with the output button.
+2. Confirm the OLED shows:
+
+   ```text
+   IN: 1
+   Out: 1
+   ```
+
+3. Press the input button once. The first line should become `IN: 2`.
+4. Continue pressing to verify `IN: 3`, `IN: 4`, then `IN: 1`.
+5. Repeat with the output button and verify the second line cycles `Out: 1` through `Out: 4`.
 6. Verify that changing one selection does not change the other.
 
 ## Troubleshooting

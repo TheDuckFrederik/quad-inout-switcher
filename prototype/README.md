@@ -2,6 +2,17 @@
 
 This prototype uses an Arduino Nano to select one of four inputs and one of four outputs. The selected values are shown on a 128×32 I2C OLED display.
 
+## Display layout
+
+The OLED uses this layout, with the numbers changing as the buttons are pressed:
+
+```text
+IN: 1
+Out: 1
+```
+
+The spacing and capitalization intentionally match the requested interface: `IN:` on the first line and `Out:` on the second line.
+
 ## Current prototype scope
 
 - Two push buttons cycle the selected input and output.
@@ -22,7 +33,7 @@ This prototype uses an Arduino Nano to select one of four inputs and one of four
 - USB data cable for Nano power/programming
 - Optional: 100 nF capacitor near the OLED power pins for supply-noise reduction
 
-No LED resistors are required because the eight LEDs were removed from this prototype.
+No LEDs or LED resistors are used in this OLED version.
 
 ## Pin summary
 
@@ -53,8 +64,8 @@ The sketch is located at:
 3. Open the sketch in Arduino IDE.
 4. Select **Arduino Nano**, **ATmega328P**, and the correct serial port.
 5. Upload the sketch.
-6. The display should show `INPUT 1` and `OUTPUT 1`.
-7. Press the input button to cycle 1 → 2 → 3 → 4 → 1.
-8. Press the output button to cycle 1 → 2 → 3 → 4 → 1.
+6. The display should show `IN: 1` on the first line and `Out: 1` on the second line.
+7. Press the input button to cycle `IN: 1` → `IN: 2` → `IN: 3` → `IN: 4` → `IN: 1`.
+8. Press the output button to cycle the `Out:` value in the same way.
 
 The jack wiring and audio-switching circuit will be defined after the routing hardware is selected.
