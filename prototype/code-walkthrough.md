@@ -19,10 +19,10 @@ It does **not** route guitar audio yet. The sketch includes a placeholder (`upda
 |---|---:|---|---|
 | Input select button | D2 | Button between D2 and GND | Uses `INPUT_PULLUP` (`LOW` when pressed) |
 | Output select button | D3 | Button between D3 and GND | Uses `INPUT_PULLUP` (`LOW` when pressed) |
-| Input LED 1..4 | D4, D5, D6, D7 | Pin -> LED anode -> LED cathode -> resistor -> GND | Active-high (`HIGH` = ON) |
-| Output LED 1..4 | D8, D9, D10, D11 | Pin -> LED anode -> LED cathode -> resistor -> GND | Active-high (`HIGH` = ON) |
+| Input LED 1..4 | D4, D5, D6, D7 | Pin -> LED + resistor in series -> GND | Active-high (`HIGH` = ON) |
+| Output LED 1..4 | D8, D9, D10, D11 | Pin -> LED + resistor in series -> GND | Active-high (`HIGH` = ON) |
 
-Use one resistor per LED (typically 220 Ω to 1 kΩ). All grounds must be common with Nano GND.
+Use one resistor per LED (typically 220 Ω to 1 kΩ). The resistor can be on either side of the LED as long as the LED+resistor are in series from pin to GND. All grounds must be common with Nano GND.
 
 ## 3) Important assumptions in code
 

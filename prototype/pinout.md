@@ -29,5 +29,5 @@ This pin map matches `prototype/quad_inout_switcher/quad_inout_switcher.ino`.
 1. Buttons use `INPUT_PULLUP`.
 2. Each button is wired between its pin and **GND** (pressed = `LOW`).
 3. LEDs are **active-high** (`HIGH` turns LED on).
-4. Each LED uses a current-limited series path from Nano pin to **GND** (for example: pin -> LED anode -> LED cathode -> resistor -> GND), with resistor value typically **220 Ω to 1 kΩ**.
+4. Each LED uses a current-limited series path from Nano pin to **GND** (LED and resistor in series; resistor may be placed on either side of the LED), with resistor value typically **220 Ω to 1 kΩ**.
 5. All button and LED grounds are common with Nano **GND**.

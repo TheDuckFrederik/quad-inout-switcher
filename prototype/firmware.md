@@ -29,7 +29,7 @@ See also: `prototype/pinout.md`.
 ## Wiring assumptions
 
 - Buttons are wired from pin to **GND** (pressed = `LOW`).
-- LEDs are wired with one resistor each in series to **GND**.
+- Each LED is wired active-high with one resistor in series on its path to **GND** (resistor can be on either side of the LED).
 - `HIGH` turns an LED on, `LOW` turns it off.
 - All grounds are shared with Nano GND.
 
