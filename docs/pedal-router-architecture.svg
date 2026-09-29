@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <rect width="1800" height="1200" fill="white"/>
+
+  <text x="900" y="50" text-anchor="middle" font-family="Arial" font-size="30" font-weight="bold" fill="#111">Pedal Router Architecture</text>
+  <text x="900" y="82" text-anchor="middle" font-family="Arial" font-size="18" fill="#444">Instrument in on the right, two pedal loops on the left, output selection in the center</text>
+
+  <!-- Sections -->
+  <rect x="60" y="120" width="1680" height="240" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="60" y="390" width="1680" height="250" rx="14" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <rect x="60" y="670" width="1680" height="430" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- Top row: jacks -->
+  <text x="140" y="150" font-family="Arial" font-size="16" font-weight="bold" fill="#111">PEDAL LOOP A</text>
+  <circle cx="130" cy="210" r="20" fill="#111"/>
+  <circle cx="130" cy="210" r="8" fill="white"/>
+  <circle cx="250" cy="210" r="20" fill="#111"/>
+  <circle cx="250" cy="210" r="8" fill="white"/>
+  <text x="130" y="245" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">SEND</text>
+  <text x="250" y="245" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">RETURN</text>
+  <circle cx="190" cy="175" r="10" fill="#f97316" stroke="#9a3412" stroke-width="2"/>
+  <text x="190" y="275" text-anchor="middle" font-family="Arial" font-size="12" fill="#444">Color: orange</text>
+
+  <text x="140" y="300" font-family="Arial" font-size="16" font-weight="bold" fill="#111">PEDAL LOOP B</text>
+  <circle cx="130" cy="360" r="20" fill="#111"/>
+  <circle cx="130" cy="360" r="8" fill="white"/>
+  <circle cx="250" cy="360" r="20" fill="#111"/>
+  <circle cx="250" cy="360" r="8" fill="white"/>
+  <text x="130" y="395" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">SEND</text>
+  <text x="250" y="395" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">RETURN</text>
+  <circle cx="190" cy="325" r="10" fill="#8b5cf6" stroke="#5b21b6" stroke-width="2"/>
+  <text x="190" y="425" text-anchor="middle" font-family="Arial" font-size="12" fill="#444">Color: purple</text>
+
+  <text x="1640" y="150" text-anchor="end" font-family="Arial" font-size="16" font-weight="bold" fill="#111">INSTRUMENT IN</text>
+  <circle cx="1710" cy="210" r="22" fill="#111"/>
+  <circle cx="1710" cy="210" r="9" fill="white"/>
+  <text x="1710" y="245" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">INST IN</text>
+
+  <!-- Middle row: outputs and loop banks -->
+  <text x="900" y="425" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#111">OUTPUT / FX ROUTING</text>
+
+  <!-- Outputs -->
+  <text x="560" y="470" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">OUT 1</text>
+  <circle cx="560" cy="520" r="22" fill="#111"/><circle cx="560" cy="520" r="9" fill="white"/>
+  <circle cx="560" cy="485" r="10" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+
+  <text x="760" y="470" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">OUT 2</text>
+  <circle cx="760" cy="520" r="22" fill="#111"/><circle cx="760" cy="520" r="9" fill="white"/>
+  <circle cx="760" cy="485" r="10" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+
+  <text x="960" y="470" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">OUT 3</text>
+  <circle cx="960" cy="520" r="22" fill="#111"/><circle cx="960" cy="520" r="9" fill="white"/>
+  <circle cx="960" cy="485" r="10" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+
+  <text x="1160" y="470" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">OUT 4</text>
+  <circle cx="1160" cy="520" r="22" fill="#111"/><circle cx="1160" cy="520" r="9" fill="white"/>
+  <circle cx="1160" cy="485" r="10" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+
+  <!-- 3 footswitches -->
+  <rect x="1390" y="440" width="250" height="70" rx="10" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+  <text x="1515" y="470" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">CENTER FOOTSWITCH</text>
+  <text x="1515" y="492" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Selects output number</text>
+
+  <rect x="1390" y="520" width="250" height="70" rx="10" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+  <text x="1515" y="550" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">LEFT FOOTSWITCH</text>
+  <text x="1515" y="572" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Controls FX-loop arrow</text>
+
+  <rect x="1390" y="600" width="250" height="70" rx="10" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+  <text x="1515" y="630" text-anchor="middle" font-family="Arial" font-size="15" font-weight="bold" fill="#111">RIGHT FOOTSWITCH</text>
+  <text x="1515" y="652" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Controls pre-out arrow</text>
+
+  <!-- Arrow states -->
+  <text x="560" y="705" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#111">PRE-OUT ARROW</text>
+  <circle cx="500" cy="770" r="18" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+  <text x="500" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">OFF</text>
+  <circle cx="600" cy="770" r="18" fill="#f97316" stroke="#9a3412" stroke-width="2"/>
+  <text x="600" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Loop A</text>
+  <circle cx="700" cy="770" r="18" fill="#8b5cf6" stroke="#5b21b6" stroke-width="2"/>
+  <text x="700" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Loop B</text>
+  <circle cx="800" cy="770" r="18" fill="#f97316" stroke="#9a3412" stroke-width="2"/>
+  <circle cx="815" cy="770" r="18" fill="#8b5cf6" stroke="#5b21b6" stroke-width="2" opacity="0.92"/>
+  <text x="810" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">A + B</text>
+
+  <text x="1260" y="705" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#111">FX-LOOP ARROW</text>
+  <circle cx="1200" cy="770" r="18" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+  <text x="1200" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">OFF</text>
+  <circle cx="1300" cy="770" r="18" fill="#f97316" stroke="#9a3412" stroke-width="2"/>
+  <text x="1300" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Loop A</text>
+  <circle cx="1400" cy="770" r="18" fill="#8b5cf6" stroke="#5b21b6" stroke-width="2"/>
+  <text x="1400" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">Loop B</text>
+  <circle cx="1500" cy="770" r="18" fill="#f97316" stroke="#9a3412" stroke-width="2"/>
+  <circle cx="1515" cy="770" r="18" fill="#8b5cf6" stroke="#5b21b6" stroke-width="2" opacity="0.92"/>
+  <text x="1510" y="810" text-anchor="middle" font-family="Arial" font-size="13" fill="#444">A + B</text>
+
+  <!-- Legend / notes -->
+  <rect x="80" y="860" width="600" height="220" rx="12" fill="white" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="110" y="895" font-family="Arial" font-size="18" font-weight="bold" fill="#111">Legend</text>
+  <line x1="110" y1="930" x2="180" y2="930" stroke="#c2410c" stroke-width="5"/>
+  <text x="200" y="935" font-family="Arial" font-size="14" fill="#444">Audio signal</text>
+  <line x1="110" y1="965" x2="180" y2="965" stroke="#2563eb" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="200" y="970" font-family="Arial" font-size="14" fill="#444">Control / footswitch logic</text>
+  <circle cx="145" cy="1005" r="10" fill="#22c55e" stroke="#166534" stroke-width="2"/>
+  <text x="200" y="1010" font-family="Arial" font-size="14" fill="#444">Active indicator LED</text>
+  <circle cx="145" cy="1045" r="10" fill="#d1d5db" stroke="#6b7280" stroke-width="2"/>
+  <text x="200" y="1050" font-family="Arial" font-size="14" fill="#444">Inactive indicator LED</text>
+  <text x="110" y="1090" font-family="Arial" font-size="13" fill="#555">Note: the exact switching ICs and jack-to-loop wiring still need confirmation.</text>
+
+  <text x="900" y="1145" text-anchor="middle" font-family="Arial" font-size="14" fill="#444">If this layout is correct, I can turn it into a cleaner final diagram with wiring labels next.</text>
+</svg>
